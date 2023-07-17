@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"team_todo/model"
+	"team_todo/global"
 
 	"github.com/jinzhu/gorm"
 )
@@ -10,7 +11,7 @@ import (
 // 由service调用的注册函数
 func Register(userinfo model.User) {
 	//DB是数据库连接
-	exist := Exists(Db, "users", "email", userinfo.Email)
+	exist := Exists(global.GVA_DB, "users", "email", userinfo.Email)
 
 	// fmt.Println("whether the email is used: ", exist)
 	if exist == true {
@@ -22,7 +23,7 @@ func Register(userinfo model.User) {
 		return
 	} else {
 		if userinfo.Password != "" && userinfo.Nickname != "" {
-			Db.Create(&user)
+			global.GVA_DB.Create(&user)
 			fmt.Println("oh created")
 		}
 	}
@@ -45,7 +46,7 @@ func Exists(db *gorm.DB, tableName string, column string, value interface{}) boo
 // 由service调用的登录函数
 func Login(userinfo model.User) {
 		var being_logged model.User
-		Db.Table("users").Where("email = ?", userinfo.Email).First(&being_logged)
+		global.GVA_DB.Table("users").Where("email = ?", userinfo.Email).First(&being_logged)
 
 		//err3 := db.Table("users").Where("phone_number = ?", user.PhoneNumber).First(&being_logged).Error
 
@@ -72,6 +73,6 @@ func Login(userinfo model.User) {
 func Modify(userinfo model.User,nickname string,avatar string) {
 	var userReq model.User
 	userReq.Nickname = nickname
-	userReq.avatar = avatar
-	Db.Model(User).Updates(userReq)
+	userReq.Avatar = avatar
+	global.GVA_DB.Model(&model.User{}).Updates(userReq)
 }
