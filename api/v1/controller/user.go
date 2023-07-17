@@ -6,9 +6,9 @@ package controller
 
 import (
 	"net/http"
-
 	"team_todo/model"
 	"team_todo/service"
+	"team_todo/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,12 +32,29 @@ func (uc *UserController) Login(c *gin.Context) {
 		return
 	}
 
-	// 调用服务层处理登录逻辑
-	err := service.Login(loginReq)
+	// 调用服务层验证密码，生成session
+	err := service.Login(loginReq, c.Request, c.Writer)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "登录成功"})
+	//设置token并返回authorization头部
+	token, expireTimestap, err := util.GenerateToken(loginReq)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate JWT"})
+		return
+	}
+	c.Header("Authorization", "Bearer "+token)
+	c.JSON(http.StatusOK, gin.H{"token": token, "expire": expireTimestap})
+}
+
+func (uc *UserController) GetProfile(c *gin.Context) {
+	GetId := c.Param("id")
+	user, err := service.GetProfile(GetId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"id": user.Id, "nickname": user.Nickname, "avatar": user.Avatar})
 }
