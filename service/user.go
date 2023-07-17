@@ -2,20 +2,28 @@ package service
 
 import (
 	"team_todo/model"
+	"team_todo/database"
 )
-
-// 用户相关函数
+//不确定要不要在这里返回错误
 // 用户注册
-func register(userinfo model.User) {
+func Register(userinfo model.User) {
+	// 在这里调用数据库包中的函数来进行用户注册逻辑处理
 
+
+	database.Register(userinfo)
+	return
 }
 
 // 用户登录
-func login(userinfo model.User) {
-
+func Login(userinfo model.User) {
+	// 在这里调用数据库包中的函数来进行用户登录逻辑处理
+	database.Login(userinfo)
+	return
 }
 
 // 用户信息修改
-func modify(userinfo model.User) {
-
+func Modify(userinfo model.User,nickname string,avatar string) {
+	// 在这里调用数据库包中的函数来进行用户信息修改逻辑处理
+	database.Modify(userinfo,nickname,avatar)
+	return 
 }
