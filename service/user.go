@@ -22,8 +22,8 @@ func Login(userinfo model.User) {
 }
 
 // 用户信息修改
-func Modify(userinfo model.User,nickname string,avatar string) {
+func Modify(userinfo model.User) {
 	// 在这里调用数据库包中的函数来进行用户信息修改逻辑处理
-	database.Modify(userinfo,nickname,avatar)
+	database.Modify(userinfo)
 	return 
 }
