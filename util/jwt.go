@@ -66,7 +66,7 @@ func GenerateToken(req model.LoginReq) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims) //签名生成token
 	tokenStr, err := token.SignedString(j.Signedkey)
 	if err != nil {
 		log.Printf("生成jwt的token失败，err: [%v]", err)
