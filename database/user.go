@@ -78,10 +78,10 @@ func Login(userinfo model.User) {
 }
 
 // 由service调用的用户信息修改函数
-func Modify(userinfo model.User,nickname string,avatar string) {
+func Modify(userinfo model.User) {
 	var userReq model.User
-	userReq.Nickname = nickname
-	userReq.Avatar = avatar
+	userReq.Nickname = userinfo.Nickname
+	userReq.Avatar = userinfo.Avatar
 	global.GVA_DB.Model(&model.User{}).Updates(userReq)
 }
 /*
