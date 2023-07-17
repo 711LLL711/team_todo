@@ -19,6 +19,8 @@ CREATE TABLE users (
 CREATE TABLE groups (
     id INT PRIMARY KEY AUTO_INCREMENT,
     group_name VARCHAR(30),
+    group_owner_id INT,
+    group_description TEXT,
     member_ids VARCHAR(255),
     task_ids VARCHAR(255)
 );
@@ -36,6 +38,7 @@ CREATE TABLE tasks (
 
 -- 创建提醒表
 CREATE TABLE reminders (
+    reminder_id INT PRIMARY KEY AUTO_INCREMENT,
     task_id INT,
     reminder_time DATETIME
 );
