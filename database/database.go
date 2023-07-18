@@ -4,6 +4,7 @@ import (
 	"log"
 	"team_todo/config"
 	"team_todo/global"
+	"team_todo/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -26,4 +27,10 @@ func Connect() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// 建表
+func CreateTables() {
+	global.GVA_DB.Migrator().CreateTable(&model.User{})
+	global.GVA_DB.Migrator().CreateTable(&model.VerCode{})
 }

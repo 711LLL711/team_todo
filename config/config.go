@@ -9,6 +9,7 @@ import (
 type Config struct {
 	JWT_secret string
 	Database   DatabaseConfig
+	Email EmailConfig
 }
 
 type DatabaseConfig struct {
@@ -20,6 +21,11 @@ type DatabaseConfig struct {
 	Parameter string //连接参数
 }
 
+type EmailConfig struct{
+	SMTP_server string
+	SenderEmail string 
+	SenderPassword string
+}
 func LoadConfig(filePath string) (Config, error) {
 	var config Config
 

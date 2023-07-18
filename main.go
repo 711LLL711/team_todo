@@ -1,7 +1,9 @@
-package team_todo
+package main
 
 import (
+	"team_todo/database"
 	"team_todo/global"
+	//"team_todo/model"
 )
 
 // 程序入口
@@ -9,4 +11,6 @@ import (
 func main() {
 	//load config
 	global.LoadConfig()
+	database.Connect()
+	database.CreateTables()
 }
