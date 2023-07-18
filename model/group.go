@@ -6,8 +6,6 @@ type Group struct {
 	GroupName         string
 	GroupOwnerId      string
 	Group_Description string
-	Group_Member_Id   []string
-	Group_Task_Id     []string
 	Group_Invite_Id   string //邀请码
 }
 type ShowGroup struct {
@@ -20,4 +18,10 @@ type QueryGroup struct {
 	GroupName         string
 	Group_Description string
 	GroupOwnerId      string
+}
+
+//群组成员id对应表
+type GroupWithUser struct {
+	UserId  string
+	GroupId string
 }
