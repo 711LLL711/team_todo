@@ -7,27 +7,28 @@ import (
 )
 
 type Config struct {
-	JWT_secret string
-	Database   DatabaseConfig
-	Email EmailConfig
+	Database   DatabaseConfig `json:"database"`
+	JWT_secret string         `json:"jwt_secret"`
+	Email      EmailConfig    `json:"email"`
 }
 
 type DatabaseConfig struct {
-	Username  string //数据库用户名
-	Password  string
-	Name      string //数据库名
-	Hostname  string
-	Port      string
-	Parameter string //连接参数
+	Hostname  string `json:"host"`
+	Port      string `json:"port"`
+	Username  string `json:"username"` // 数据库用户名
+	Password  string `json:"password"`
+	Name      string `json:"name"`      // 数据库名
+	Parameter string `json:"parameter"` // 连接参数
 }
 
-type EmailConfig struct{
-	SMTP_server string
-	SenderEmail string 
+type EmailConfig struct {
+	SMTP_server    string
+	SenderEmail    string
 	SenderPassword string
 }
-func LoadConfig(filePath string) (Config, error) {
-	var config Config
+
+func LoadConfig(filePath string) (*Config, error) {
+	var config *Config
 
 	file, err := os.ReadFile(filePath)
 	if err != nil {

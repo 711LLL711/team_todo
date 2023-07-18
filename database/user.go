@@ -3,6 +3,7 @@ package database
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"team_todo/global"
 	"team_todo/model"
@@ -21,27 +22,23 @@ func Myencrypt(row string) string {
 
 // 由service调用的注册函数
 func Register(userinfo model.User) error {
-	//DB是数据库连接
-	exist := Exists(global.GVA_DB, "users", "email", userinfo.Email)
-
-	// fmt.Println("whether the email is used: ", exist)
-	if exist {
-		// err1 := fmt.Errorf("y")
-		// panic(err1)
-
-		//返回已注册
-		fmt.Println("The email is already registered.Change a email number or log in directly.")
-		return fmt.Errorf("the email is already registered. Please choose a different email or log in directly")
-
-	} else {
-		userinfo.Password = Myencrypt(userinfo.Password)
-
-		global.GVA_DB.Create(&userinfo)
-		fmt.Println("oh created")
-
-		return nil
-
+	var finduser model.User
+	if err := global.GVA_DB.Table("user").
+		Where("email = ?", userinfo.Email).
+		First(&finduser).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			// 用户不存在，可以创建新用户
+			userinfo.Password = Myencrypt(userinfo.Password) //加密密码
+			if err := global.GVA_DB.Table("user").Create(&userinfo).Error; err != nil {
+				return err
+			}
+			return nil
+		}
+		// 查询过程中发生错误
+		return err
 	}
+	// 用户已存在，返回错误信息
+	return errors.New("EMAIL ALREADY REGISTERD")
 }
 
 // 判断指定表tableName的字段column是否存在值value
@@ -61,16 +58,12 @@ func Exists(db *gorm.DB, tableName string, column string, value interface{}) boo
 // 由service调用的登录函数
 func Login(userinfo model.User) error {
 	var being_logged model.User
-	global.GVA_DB.Table("users").Where("email = ?", userinfo.Email).First(&being_logged)
+	global.GVA_DB.Table("user").Where("email = ?", userinfo.Email).First(&being_logged)
 
 	switch {
 	case Myencrypt(userinfo.Password) == being_logged.Password:
 		fmt.Println("log in successfully")
-		//登录成功标识......
-		//......
-		var err error
-		err = nil
-		return err
+		return nil
 	case being_logged.Email != "":
 		fmt.Println("The email and the password is not matched.")
 		//登录失败
@@ -98,7 +91,7 @@ func Modify(userinfo model.User) error {
 // 由service调用的获取用户资料函数
 func GetProfile(UserId string) (model.User, error) {
 	var user model.User
-	err := global.GVA_DB.Table("users").Where("id = ?", UserId).First(&user).Error
+	err := global.GVA_DB.Table("user").Where("id = ?", UserId).First(&user).Error
 	if err != nil {
 		return user, err
 	}
@@ -107,7 +100,7 @@ func GetProfile(UserId string) (model.User, error) {
 
 func GetId(email string) (string, error) {
 	var user model.User
-	err := global.GVA_DB.Table("users").Where("email = ?", email).First(&user).Error
+	err := global.GVA_DB.Table("user").Where("email = ?", email).First(&user).Error
 	if err != nil {
 		return "", err
 	}

@@ -19,33 +19,6 @@ import (
 // 	Parameter string //连接参数
 // }
 
-// 新建表
-func Init() {
-	// 创建用户表
-	err := global.GVA_DB.AutoMigrate(&model.User{})
-	if err != nil {
-		panic("failed to create user table")
-	}
-
-	// 创建群组表
-	err = global.GVA_DB.AutoMigrate(&model.Group{})
-	if err != nil {
-		panic("failed to create group table")
-	}
-
-	// 创建任务表
-	err = global.GVA_DB.AutoMigrate(&model.Task{})
-	if err != nil {
-		panic("failed to create task table")
-	}
-
-	// 创建提醒表
-	err = global.GVA_DB.AutoMigrate(&model.Reminder{})
-	if err != nil {
-		panic("failed to create reminder table")
-	}
-}
-
 // 包括 数据库连接、查询数据库等函数
 func Connect() {
 	dsn := config.DSN(global.GVA_CONFIG.Database)
@@ -58,6 +31,10 @@ func Connect() {
 
 // 建表
 func CreateTables() {
-	global.GVA_DB.Migrator().CreateTable(&model.User{})
-	global.GVA_DB.Migrator().CreateTable(&model.VerCode{})
+	global.GVA_DB.Table("user").AutoMigrate(&model.User{})
+	global.GVA_DB.Table("group").AutoMigrate(&model.Group{})
+	global.GVA_DB.Table("groupwithuser").AutoMigrate(&model.GroupWithUser{})
+	global.GVA_DB.Table("task").AutoMigrate(&model.Task{})
+	global.GVA_DB.Table("vercode").AutoMigrate(&model.VerCode{})
+	global.GVA_DB.Table("reminder").AutoMigrate(&model.Reminder{})
 }

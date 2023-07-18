@@ -8,7 +8,7 @@ import (
 )
 
 // 设置中间件,验证鉴权--判断是否登录
-func authMiddleware() gin.HandlerFunc {
+func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 从请求头部获取 Bearer JWT
 		authHeader := c.GetHeader("Authorization")

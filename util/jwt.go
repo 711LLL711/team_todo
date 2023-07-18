@@ -49,7 +49,7 @@ func (j *jwt_secret) CreateClaims(baseClaims BaseClaims) (RegisteredClaims, erro
 }
 
 // 生成token
-func GenerateToken(req model.LoginReq) (string, int64, error) {
+func GenerateToken(req model.User) (string, int64, error) {
 	//返回token,过期时间戳，错误
 	j, err := NewJwtsecret()
 	if err != nil {

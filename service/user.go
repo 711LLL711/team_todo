@@ -5,13 +5,14 @@ import (
 	"team_todo/database"
 	"team_todo/global"
 	"team_todo/model"
+	"team_todo/util"
 
 	"fmt"
-	"time"
-
 	"math/rand"
+	"net/http"
 	"net/smtp"
 	"strings"
+	"time"
 )
 
 // 用户注册
@@ -23,7 +24,7 @@ func Register(userinfo model.User) error {
 }
 
 // 用户登录
-func Login(userinfo model.LoginReq, req *http.Request, resp http.ResponseWriter) error {
+func Login(userinfo model.User, req *http.Request, resp http.ResponseWriter) error {
 	// 在这里调用数据库包中的函数来进行用户登录逻辑处理
 	err := database.Login(userinfo)
 	if err != nil {

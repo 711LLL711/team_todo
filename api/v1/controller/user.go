@@ -26,7 +26,7 @@ func (uc *UserController) ShowLoginPage(c *gin.Context) {
 
 // 处理登录请求
 func (uc *UserController) Login(c *gin.Context) {
-	var loginReq model.LoginReq
+	var loginReq model.User
 	if err := c.ShouldBind(&loginReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
