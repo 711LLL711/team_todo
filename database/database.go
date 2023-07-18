@@ -55,3 +55,9 @@ func Connect() {
 		log.Fatal(err)
 	}
 }
+
+// 建表
+func CreateTables() {
+	global.GVA_DB.Migrator().CreateTable(&model.User{})
+	global.GVA_DB.Migrator().CreateTable(&model.VerCode{})
+}

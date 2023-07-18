@@ -14,9 +14,22 @@ func SetupRoutes(r *gin.Engine) {
 	r.POST("/user/login", userController.Login)
 	r.GET("GET /users/:id/profile", userController.GetProfile)
 
+	//注册
+	r.POST("/user/register", controller.Register)
+
+	//更新
+	r.PUT("/user/profile") //鉴权中间件,controller.Update
+
+	//发送邮箱验证码
+	r.GET("/user/verify-code", controller.SendVerCodeByEmail)
+
+	//重设密码(注册时发送“发送邮箱验证码”“重设密码”“注册”请求)
+
+	r.GET("/users/verify-code", controller.ResetPassword)
 	groupController := &controller.GroupController{}
 	r.POST("/groups", groupController.CreateGroup)
 	r.GET("/groups", groupController.GetGroupList)
 	r.GET("groups/:id/info", groupController.GetGroupInfo)
 	r.GET("groups/:id/members", groupController.GetGroupMembers)
+
 }

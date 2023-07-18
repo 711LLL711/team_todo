@@ -1,7 +1,8 @@
 package database
 
 import (
-	"errors"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"team_todo/global"
 	"team_todo/model"
@@ -9,24 +10,37 @@ import (
 	"gorm.io/gorm"
 )
 
+// 加密
+func Myencrypt(row string) string {
+	data := []byte(row)
+	hash := sha256.Sum256(data)
+	fmt.Printf("%x\n", hash)
+	res := hex.EncodeToString(hash[:])
+	return res
+}
+
 // 由service调用的注册函数
-func Register(userinfo model.User) {
+func Register(userinfo model.User) error {
 	//DB是数据库连接
 	exist := Exists(global.GVA_DB, "users", "email", userinfo.Email)
 
 	// fmt.Println("whether the email is used: ", exist)
-	if exist == true {
+	if exist {
 		// err1 := fmt.Errorf("y")
 		// panic(err1)
 
 		//返回已注册
 		fmt.Println("The email is already registered.Change a email number or log in directly.")
-		return
+		return fmt.Errorf("the email is already registered. Please choose a different email or log in directly")
+
 	} else {
-		if userinfo.Password != "" && userinfo.Nickname != "" {
-			global.GVA_DB.Create(&userinfo)
-			fmt.Println("oh created")
-		}
+		userinfo.Password = Myencrypt(userinfo.Password)
+
+		global.GVA_DB.Create(&userinfo)
+		fmt.Println("oh created")
+
+		return nil
+
 	}
 }
 
@@ -45,41 +59,40 @@ func Exists(db *gorm.DB, tableName string, column string, value interface{}) boo
 }
 
 // 由service调用的登录函数
-func Login(userinfo model.LoginReq) error {
+func Login(userinfo model.User) error {
 	var being_logged model.User
 	global.GVA_DB.Table("users").Where("email = ?", userinfo.Email).First(&being_logged)
 
-	//err3 := db.Table("users").Where("phone_number = ?", user.PhoneNumber).First(&being_logged).Error
-
-	//checkerr(err3)
-
-	// fmt.Println("user password: ", user.Password, "user Nickname: ", user.NickName, "right password: ", being_logged.Password, "right nickname: ", being_logged.NickName)
-	// fmt.Println("the user who is being logged : ", being_logged.PhoneNumber, being_logged.Password)
-	// fmt.Println("user password: ", user.Password, "right password: ", being_logged.Password)
 	switch {
-	case userinfo.Password == being_logged.Password:
-		//号码匹配设置jwt
-		fmt.Println("password correct")
-		return nil
+	case Myencrypt(userinfo.Password) == being_logged.Password:
+		fmt.Println("log in successfully")
 		//登录成功标识......
 		//......
+		var err error
+		err = nil
+		return err
 	case being_logged.Email != "":
 		fmt.Println("The email and the password is not matched.")
-		return errors.New("PASSWORD NOT CORRECT")
 		//登录失败
+		return fmt.Errorf("密码与邮箱不匹配")
 	default:
 		fmt.Println("The email number is not registered.Please register first.")
 		//未注册
-		return errors.New("NOT RESIGTERED")
+		return fmt.Errorf("未注册")
 	}
 }
 
 // 由service调用的用户信息修改函数
-func Modify(userinfo model.User, nickname string, avatar string) {
+func Modify(userinfo model.User) error {
 	var userReq model.User
-	userReq.Nickname = nickname
-	userReq.Avatar = avatar
-	global.GVA_DB.Model(&model.User{}).Updates(userReq)
+	userReq.Nickname = userinfo.Nickname
+	userReq.Avatar = userinfo.Avatar
+
+	err := global.GVA_DB.Model(&model.User{}).Where("email = ?", userinfo.Email).Updates(&userReq).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // 由service调用的获取用户资料函数

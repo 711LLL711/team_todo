@@ -21,6 +21,7 @@ URL 前缀：
 `http(s)://<Host>/api/v1`
 
 ### 用户模块
+
 ---
 
 #### 用户注册
@@ -103,6 +104,7 @@ GET /users/verify-code
 | -------- | ------ | -------- |
 | email    | string | 用户邮箱 |
 | password | string | 用户密码 |
+| code     | string | 验证码   |
 
 #### 获取用户资料
 
@@ -580,4 +582,3 @@ DELETE /reminders/{id}
 | 参数 | 类型   | 描述   |
 | ---- | ------ | ------ |
 | id   | string | 提醒ID |
-

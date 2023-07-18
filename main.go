@@ -1,4 +1,4 @@
-package team_todo
+package main
 
 import (
 	"team_todo/database"
