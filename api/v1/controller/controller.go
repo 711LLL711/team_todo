@@ -47,19 +47,18 @@ func Update(c *gin.Context) {
 func SendVerCodeByEmail(c *gin.Context) {
 	service.SenderEmail()
 	reqemail := c.PostForm("email")
-	code := service.GenVerCode(reqemail)//生成验证码，并存到数据库
+	code := service.GenVerCode(reqemail) //生成验证码，并存到数据库
 	err := service.PerformEmailSending(reqemail, code)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": "fail",
-			"error":err,
+			"error":  err,
 		})
 		return
 	}
-	return
 }
 
-//重设密码
+// 重设密码
 func ResetPassword(c *gin.Context) {
 	var userReq model.User
 	userReq.Email = c.PostForm("email")
@@ -70,8 +69,8 @@ func ResetPassword(c *gin.Context) {
 		service.Modify(userReq)
 		return
 	}
-	c.JSON(http.StatusBadRequest,gin.H{
-			"status": "fail",
-			"error":"wrong verification code",
+	c.JSON(http.StatusBadRequest, gin.H{
+		"status": "fail",
+		"error":  "wrong verification code",
 	})
 }

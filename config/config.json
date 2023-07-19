@@ -1,10 +1,11 @@
 {
   "database": {
     "host": "localhost",
-    "port": 3306,
+    "port": "3306",
     "username": "root",
     "password": "mysql002003004",
-    "name": "team_todo"
+    "name": "team_todo",
+    "parameter": ""
   },
   "jwt_secret": "bAlc5pLZek78sOuVZm0p6L3OmY1qSIb8u3ql",
   "email": {
