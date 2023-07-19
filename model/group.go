@@ -2,11 +2,11 @@ package model
 
 //群组相关结构体
 type Group struct {
-	GroupId           string
-	GroupName         string
-	GroupOwnerId      string
-	Group_Description string
-	Group_Invite_Id   string //邀请码
+	GroupId           string `gorm:"column:groupid"`
+	GroupName         string `gorm:"column:groupname"`
+	GroupOwnerId      string `gorm:"column:groupownerid"`
+	Group_Description string `gorm:"column:group_description"`
+	Group_Invite_Id   string `gorm:"column:group_invite_id"` //邀请码
 }
 type ShowGroup struct {
 	GroupId           string
@@ -22,6 +22,6 @@ type QueryGroup struct {
 
 //群组成员id对应表
 type GroupWithUser struct {
-	UserId  string
-	GroupId string
+	UserId  string `gorm:"column:userid"`
+	GroupId string `gorm:"column:groupid"`
 }

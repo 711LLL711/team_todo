@@ -4,9 +4,9 @@ package model
 type Task struct {
 	ID          string `gorm:"primaryKey"`
 	Name        string `gorm:"not null"`
-	GroupId     string
+	GroupId     string `gorm:"column:groupid"`
 	Description string
 	Status      string //任务状态0-TODO 1-DONE
-	AssigneeId  string //负责人
-	DueDate     string //ddl
+	AssigneeId  string `gorm:"column:assigneeid"` //负责人
+	DueDate     string `gorm:"column:duedate"`    //ddl
 }
