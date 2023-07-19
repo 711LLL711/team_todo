@@ -10,7 +10,10 @@ import (
 var (
 	GVA_DB     *gorm.DB
 	GVA_CONFIG *config.Config
+	GVA_CWD    string
 )
+
+const BaseUrl = "http://localhost:8080"
 
 // 解析配置文件到GVA_CONFIG
 func LoadConfig() {

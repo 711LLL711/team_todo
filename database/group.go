@@ -49,14 +49,14 @@ func GetUserGroups(UserId string) ([]model.ShowGroup, int64, error) {
 
 	// 查询 group 表获取对应的记录和总记录数
 	if err := global.GVA_DB.Table("group").
-		Select("group_id, group_name, group_description").
-		Where("group_id IN ?", ids).
+		Select("groupid, groupname, group_description").
+		Where("groupid IN ?", ids).
 		Find(&groups).Error; err != nil {
 		return nil, 0, err
 	}
 
 	if err := global.GVA_DB.Table("group").
-		Where("group_id IN ?", ids).
+		Where("groupid IN ?", ids).
 		Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
@@ -75,7 +75,7 @@ func GetGroupInfo(GroupId string) (model.Group, error) {
 }
 
 func GetGroupMembers(GroupId string) ([]model.QueryUser, int64, error) {
-	var userIDs []struct{ UserID string }
+	var userIDs []string
 	var users []model.QueryUser
 	var count int64
 
@@ -87,16 +87,10 @@ func GetGroupMembers(GroupId string) ([]model.QueryUser, int64, error) {
 		return nil, 0, err
 	}
 
-	// 构建 userid 的切片
-	ids := make([]string, len(userIDs))
-	for i, result := range userIDs {
-		ids[i] = result.UserID
-	}
-
 	// 查询 user 表获取对应的记录和总记录数
 	if err := global.GVA_DB.Table("user").
 		Select("id, nickname, email, avatar").
-		Where("id IN ?", ids).
+		Where("id IN ?", userIDs).
 		Find(&users).Error; err != nil {
 		return nil, 0, err
 	}
@@ -123,11 +117,16 @@ func GetGroupCode(GroupId string) (string, error) {
 	return group.Group_Invite_Id, nil
 }
 func StoreGroupCode(GroupId string, invitecode string) error {
-	err := global.GVA_DB.Model(&model.Group{}).Where("groupid = ?", GroupId).
-		Update("group_invite_id", invitecode).Error
-	if err != nil {
+	var group model.Group
+
+	if err := global.GVA_DB.Table("group").Where("groupid = ?", GroupId).First(&group).Error; err != nil {
 		return err
 	}
+	group.Group_Invite_Id = invitecode
+	if err := global.GVA_DB.Table("group").Where("groupid = ?", GroupId).Updates(&group).Error; err != nil {
+		return err
+	}
+
 	return nil
 }
 

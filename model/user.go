@@ -2,19 +2,19 @@ package model
 
 //定义用户结构体
 type User struct {
-	Id       string
-	Nickname string
-	Email    string
-	Password string
-	Avatar   string //头像图片存储在服务器的路径
+	Id       string `json:"id"`
+	Nickname string `json:"nickname"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Avatar   string `json:"avatar"` //头像图片存储在服务器的路径
 }
 type LoginReq struct {
-	Email    string
-	Password string
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 type QueryUser struct {
-	Id       string
-	Nickname string
-	Email    string
-	Avatar   string
+	Id       string `json:"id"`
+	Nickname string `json:"nickname"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
 }

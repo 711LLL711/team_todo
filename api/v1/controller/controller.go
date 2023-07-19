@@ -3,10 +3,11 @@ package controller
 //从路由请求中解析参数和结构体，调用 Model 和 Service，处理业务逻辑，决定如何响应用户的请求，处理异常和错误
 
 import (
+	"net/http"
 	"team_todo/model"
 	"team_todo/service"
 
-	"net/http"
+	"github.com/google/uuid"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +18,7 @@ func Register(c *gin.Context) {
 	userReq.Email = c.PostForm("email")
 	userReq.Password = c.PostForm("password")
 	userReq.Nickname = c.PostForm("nickname")
-
+	userReq.Id = uuid.New().String()[:8]
 	if userReq.Email == "" || userReq.Password == "" || userReq.Nickname == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "信息为空"})
 		return
@@ -40,7 +41,12 @@ func Update(c *gin.Context) {
 	userReq.Nickname = c.PostForm("nickname")
 	userReq.Avatar = c.PostForm("avatar")
 
-	service.Modify(userReq)
+	err := service.Modify(userReq)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "ok"})
 }
 
 // 发送邮箱验证码
