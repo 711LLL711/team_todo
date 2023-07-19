@@ -6,11 +6,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+<<<<<<< HEAD
 //设置路由
 //登录、注册、找回密码...见api文档
 
 // 注册、更新、发送邮箱验证码
 func MyRouter(r *gin.Engine) {
+=======
+// 设置路由
+// 登录、注册、找回密码...见api文档
+func SetupRoutes(r *gin.Engine) {
+	userController := &controller.UserController{}
+	r.GET("/user/login", userController.ShowLoginPage)
+	r.POST("/user/login", userController.Login)
+	r.GET("GET /users/:id/profile", userController.GetProfile)
+>>>>>>> main
 
 	//注册
 	r.POST("/user/register", controller.Register)
@@ -22,5 +32,16 @@ func MyRouter(r *gin.Engine) {
 	r.GET("/user/verify-code", controller.SendVerCodeByEmail)
 
 	//重设密码(注册时发送“发送邮箱验证码”“重设密码”“注册”请求)
+<<<<<<< HEAD
 	r.GET("/users/verify-code", controller.ResetPassword)
+=======
+
+	r.GET("/users/verify-code", controller.ResetPassword)
+	groupController := &controller.GroupController{}
+	r.POST("/groups", groupController.CreateGroup)
+	r.GET("/groups", groupController.GetGroupList)
+	r.GET("groups/:id/info", groupController.GetGroupInfo)
+	r.GET("groups/:id/members", groupController.GetGroupMembers)
+
+>>>>>>> main
 }

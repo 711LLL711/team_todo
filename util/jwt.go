@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"team_todo/config"
 	"team_todo/global"
 	"team_todo/model"
 	"time"
@@ -17,13 +16,9 @@ type jwt_secret struct {
 	Signedkey []byte
 }
 
-// 从配置文件中获取密钥
+// 从配置中获取密钥
 func NewJwtsecret() (*jwt_secret, error) {
-	configFilePath := "../config/config.json"
-	myconfig, err := config.LoadConfig(configFilePath)
-	if err != nil {
-		return nil, errors.New("读取配置文件失败")
-	}
+	myconfig := global.GVA_CONFIG
 	return &jwt_secret{Signedkey: []byte(myconfig.JWT_secret)}, nil
 }
 
@@ -54,30 +49,33 @@ func (j *jwt_secret) CreateClaims(baseClaims BaseClaims) (RegisteredClaims, erro
 }
 
 // 生成token
-func GenerateToken(req model.LoginReq) (string, error) {
+func GenerateToken(req model.LoginReq) (string, int64, error) {
+	//返回token,过期时间戳，错误
 	j, err := NewJwtsecret()
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
 	claims, err := j.CreateClaims(BaseClaims{
 		Email:    req.Email,
 		Password: req.Password,
 	})
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims) //签名生成token
 	tokenStr, err := token.SignedString(j.Signedkey)
 	if err != nil {
 		log.Printf("生成jwt的token失败，err: [%v]", err)
-		return "", err
+		return "", 0, err
 	}
-	return tokenStr, nil
+	expireAt := claims.RegisteredClaims.ExpiresAt
+	expireTimestap := expireAt.Unix()
+	return tokenStr, expireTimestap, nil
 
 }
 
 // 检查token
-func CheckToken(token string) (RegisteredClaims, error) {
+func CheckToken(token string) (*RegisteredClaims, error) {
 	parse, err := jwt.ParseWithClaims(token, &RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("签名方式有误: [%v]", token.Header["alg"])
@@ -86,24 +84,24 @@ func CheckToken(token string) (RegisteredClaims, error) {
 		return []byte(SigningKey), nil
 	})
 	if parse == nil {
-		return RegisteredClaims{}, errors.New("token为空/token有误")
+		return nil, errors.New("token为空/token有误")
 	}
 	if parse.Valid {
 		if claims, ok := parse.Claims.(*RegisteredClaims); ok {
-			return *claims, nil
+			return claims, nil
 		} else {
-			return RegisteredClaims{}, errors.New("token解析不正确")
+			return nil, errors.New("token解析不正确")
 		}
 	} else if errors.Is(err, jwt.ErrTokenMalformed) {
-		return RegisteredClaims{}, errors.New("令牌格式不正确")
+		return nil, errors.New("令牌格式不正确")
 	} else if errors.Is(err, jwt.ErrTokenExpired) {
-		return RegisteredClaims{}, errors.New("令牌已过期")
+		return nil, errors.New("令牌已过期")
 	} else if errors.Is(err, jwt.ErrTokenSignatureInvalid) {
-		return RegisteredClaims{}, errors.New("令牌签名无效")
+		return nil, errors.New("令牌签名无效")
 	} else if errors.Is(err, jwt.ErrTokenNotValidYet) {
-		return RegisteredClaims{}, errors.New("令牌尚未生效")
+		return nil, errors.New("令牌尚未生效")
 	} else {
-		return RegisteredClaims{}, err
+		return nil, err
 	}
 }
 

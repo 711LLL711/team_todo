@@ -95,6 +95,25 @@ func Modify(userinfo model.User) error {
 	return nil
 }
 
+// 由service调用的获取用户资料函数
+func GetProfile(UserId string) (model.User, error) {
+	var user model.User
+	err := global.GVA_DB.Table("users").Where("id = ?", UserId).First(&user).Error
+	if err != nil {
+		return user, err
+	}
+	return user, nil
+}
+
+func GetId(email string) (string, error) {
+	var user model.User
+	err := global.GVA_DB.Table("users").Where("email = ?", email).First(&user).Error
+	if err != nil {
+		return "", err
+	}
+	return user.Id, nil
+}
+
 /*
 //上传头像图片函数
 func UploadAvatar(c *gin.Context) {

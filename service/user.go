@@ -7,11 +7,12 @@ import (
 	"team_todo/model"
 
 	"fmt"
-	"time"
-
 	"math/rand"
+	"net/http"
 	"net/smtp"
 	"strings"
+	"team_todo/util"
+	"time"
 )
 
 // 用户注册
@@ -23,10 +24,18 @@ func Register(userinfo model.User) error {
 }
 
 // 用户登录
-func Login(userinfo model.User) error {
+func Login(userinfo model.User, req *http.Request, resp http.ResponseWriter) error {
 	// 在这里调用数据库包中的函数来进行用户登录逻辑处理
-	err := database.Login(userinfo)
-	return err
+	session.Email = userinfo.Email
+	session.Id, err = database.GetId(userinfo.Email)
+	if err != nil {
+		return err
+	}
+	err = util.SetSession(resp, req, session.Id, session.Email)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // 用户信息修改
@@ -34,7 +43,6 @@ func Modify(userinfo model.User) error {
 	// 在这里调用数据库包中的函数来进行用户信息修改逻辑处理
 	err := database.Modify(userinfo)
 	return err
-}
 
 // 读取文件配置，获得
 func SenderEmail() (*config.EmailConfig, error) {
@@ -72,7 +80,7 @@ func SenderEmail() (*config.EmailConfig, error) {
 //		return nil
 //	}
 
-//邮件发送格式化函数
+// 邮件发送格式化函数
 func SendMail(user, password, host, to, subject, body, mailtype string) error {
 	hp := strings.Split(host, ":")
 	auth := smtp.PlainAuth(password, user, password, hp[0])
@@ -88,8 +96,8 @@ func SendMail(user, password, host, to, subject, body, mailtype string) error {
 	return err
 }
 
-//邮件发送执行函数
-func PerformEmailSending(reqemail,code string)error {
+// 邮件发送执行函数
+func PerformEmailSending(reqemail, code string) error {
 	// s := GenRanNum(100000, 999999)
 	// fmt.Println(s)
 
@@ -169,4 +177,11 @@ func CheckVercode(code string, reqemail string) bool {
 	}
 
 	return false
+}
+
+//获取用户资料
+
+func GetProfile(UserId string) (model.User, error) {
+	user, err := database.GetProfile(UserId)
+	return user, err
 }
