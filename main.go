@@ -1,6 +1,7 @@
 package main
 
 import (
+	route "team_todo/api/v1"
 	"team_todo/database"
 	"team_todo/global"
 
@@ -14,9 +15,17 @@ func main() {
 	global.LoadConfig()
 	//connect the database
 	database.Connect()
-
+	//建表
+	database.CreateTables()
 	//设置服务器
 	Server := gin.Default()
+
+	//设置存放图片
+	Server.Static("/images", "./images")
+
+	// 设置路由
+	route.SetupRoutes(Server)
+
 	//load the front-end file
 	//Server.LoadHTMLGlob("templates/*")
 	Server.Run(":8080")

@@ -57,9 +57,9 @@ func Exists(db *gorm.DB, tableName string, column string, value interface{}) boo
 
 // 由service调用的登录函数
 func Login(userinfo model.User) error {
+	//加密用户输入的密码判断是否与数据库中匹配
 	var being_logged model.User
 	global.GVA_DB.Table("user").Where("email = ?", userinfo.Email).First(&being_logged)
-
 	switch {
 	case Myencrypt(userinfo.Password) == being_logged.Password:
 		fmt.Println("log in successfully")
@@ -105,4 +105,21 @@ func GetId(email string) (string, error) {
 		return "", err
 	}
 	return user.Id, nil
+}
+
+func UpdateAvatar(id, avatar string) error {
+	var user model.User
+	if err := global.GVA_DB.Table("user").Where("id = ?", id).First(&user).Error; err != nil {
+		return err
+	}
+
+	// 修改 avatar 值为指定的 url
+	user.Avatar = avatar
+
+	// 使用 Update 方法更新记录
+	if err := global.GVA_DB.Table("user").Where("id = ?", id).Updates(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
