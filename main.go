@@ -1,8 +1,11 @@
 package main
 
 import (
+	route "team_todo/api/v1"
 	"team_todo/database"
 	"team_todo/global"
+
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +18,11 @@ func main() {
 	//connect the database
 	database.Connect()
 
+	database.CreateTables()
+fmt.Println("connected")
 	//设置服务器
+	r := &gin.Engine{}
+	route.SetupRoutes(r)
 	Server := gin.Default()
 	//load the front-end file
 	//Server.LoadHTMLGlob("templates/*")

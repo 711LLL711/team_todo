@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"team_todo/model"
 	"team_todo/service"
@@ -24,15 +25,7 @@ func CreateTasks(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"err": "wrong"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"id":          task.ID,
-		"name":        task.Name,
-		"description": task.Description,
-		"status":      task.Status,
-		"assignee":    task.Assignee,
-		"deadline":    task.Deadline,
-		"groupId":     task.GroupId,
-	})
+	c.JSON(http.StatusOK, task)
 }
 
 // 获取任务列表
@@ -44,7 +37,7 @@ func GetTasksList(c *gin.Context) {
 	var err error
 	count, tasks, err = service.GetTasksList(groupId)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"err": "wrong"})
+		c.JSON(http.StatusBadRequest, gin.H{"err": "wrong"})
 		return
 	}
 
@@ -84,29 +77,52 @@ func GetTasksList(c *gin.Context) {
 	})
 }
 
+// 获取任务信息
 func GetTasks(c *gin.Context) {
 	id := c.Param("id")
 	var task model.Task
 	var err error
 	task, err = service.GetTasks(id)
 	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "wrong"})
+		return
+	}
+	c.JSON(http.StatusOK, task)
+}
+
+// 更新任务信息
+func ModifyTasks(c *gin.Context) {
+	taskID := c.Param("id")
+	var task model.Task
+	task.ID = c.PostForm("id")
+	if taskID !=task.ID{
+		c.JSON(http.StatusBadRequest, gin.H{"err": "任务ID冲突"})
+		log.Panicln("error")
+		return
+	}
+	task.Name = c.PostForm("name")
+	task.Description = c.PostForm("description")
+	task.Status = c.PostForm("status")
+	task.GroupId = c.PostForm("groupId")
+
+	var err error
+	task.GroupId, err = service.ModifyTasks(taskID, task)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"err": "wrong"})
+		return
+	}
+	c.JSON(http.StatusOK, task)
+}
+
+//删除任务
+func DeleteTasks(c *gin.Context) {
+	taskID := c.Param("id")
+	err := service.DeleteTasks(taskID)
+	
+	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"err": "wrong"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"id":          task.ID,
-		"name":        task.Name,
-		"description": task.Description,
-		"status":      task.Status,
-		"assignee":    task.Assignee,
-		"deadline":    task.Deadline,
-		"groupId":     task.GroupId,
-	})
-}
-func ModifyTasks(c *gin.Context) {
-	id := c.Param("id")
-
-}
-func DeleteTasks(c *gin.Context) {
-
+	c.JSON(http.StatusOK, gin.H{"message":"success"})
 }

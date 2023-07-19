@@ -61,3 +61,7 @@ func CreateTables() {
 	global.GVA_DB.Migrator().CreateTable(&model.User{})
 	global.GVA_DB.Migrator().CreateTable(&model.VerCode{})
 }
+
+func CreateTasksTable(){
+global.GVA_DB.AutoMigrate(&model.Task{})
+}

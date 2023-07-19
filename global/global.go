@@ -14,7 +14,8 @@ var (
 
 // 解析配置文件到GVA_CONFIG
 func LoadConfig() {
-	configFilePath := "../config/config.json"
+	GVA_CONFIG = &config.Config{}
+	configFilePath := "config/config.json"
 	var err error
 	*GVA_CONFIG, err = config.LoadConfig(configFilePath)
 	if err != nil {
