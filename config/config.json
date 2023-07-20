@@ -9,7 +9,6 @@
   },
   "jwt_secret": "bAlc5pLZek78sOuVZm0p6L3OmY1qSIb8u3ql",
   "email": {
-    "SMTP_server": "",
     "sender_email": "",
     "sender_password": ""
   }

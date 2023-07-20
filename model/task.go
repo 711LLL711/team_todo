@@ -2,11 +2,11 @@ package model
 
 // 定义任务相关结构体
 type Task struct {
-	ID          string `gorm:"primaryKey"`
-	Name        string `gorm:"not null"`
-	GroupId     string `gorm:"column:groupid"`
-	Description string
-	Status      string //任务状态0-TODO 1-DONE
-	AssigneeId  string `gorm:"column:assigneeid"` //负责人
-	DueDate     string `gorm:"column:duedate"`    //ddl
+	ID          string `gorm:"primaryKey" json:"id"`
+	Name        string `gorm:"not null" json:"name"`
+	GroupId     string `gorm:"column:groupid" `
+	Description string `json:"description"`
+	Status      string `json:"status"`   //任务状态0-TODO 1-DONE
+	Assignee    string `json:"assignee"` //负责人
+	Deadline    string `json:"deadline"` //ddl
 }

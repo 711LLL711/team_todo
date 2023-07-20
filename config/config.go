@@ -22,7 +22,6 @@ type DatabaseConfig struct {
 }
 
 type EmailConfig struct {
-	SMTP_server    string
 	SenderEmail    string
 	SenderPassword string
 }
