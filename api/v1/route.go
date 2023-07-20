@@ -18,6 +18,7 @@ func SetupRoutes(r *gin.Engine) {
 	r.GET("/users/:id/profile", userController.GetProfile)
 	//上传头像
 	r.POST("/avatars", userController.UploadAvatar)
+
 	//注册
 	r.POST("/user/register", controller.Register)
 
@@ -25,7 +26,7 @@ func SetupRoutes(r *gin.Engine) {
 	r.PUT("/user/profile", controller.Update)
 
 	//发送邮箱验证码
-	r.GET("/user/verify-code", controller.SendVerCodeByEmail)
+	r.POST("/user/verify-code", controller.SendVerCodeByEmail)
 
 	//运用中间件的路由
 	// User_Auth_Group := r.Group("/user" , middleware.AuthMiddleware())
@@ -36,11 +37,10 @@ func SetupRoutes(r *gin.Engine) {
 	// }
 	//重设密码(注册时发送“发送邮箱验证码”“重设密码”“注册”请求)
 
-	r.GET("/users/verify-code", controller.ResetPassword)
+	r.POST("/users/resetpassword", controller.ResetPassword)
 	groupController := &controller.GroupController{}
 	//创建群组
 	r.POST("/groups", groupController.CreateGroup)
-
 	//获取已加入群组列表
 	r.GET("/groups", groupController.GetGroupList)
 
@@ -61,5 +61,4 @@ func SetupRoutes(r *gin.Engine) {
 
 	//解散群组
 	r.DELETE("/groups/:id", groupController.DelGroup)
-
 }

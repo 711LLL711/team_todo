@@ -51,6 +51,7 @@ func Modify(userinfo model.User) error {
 	return err
 }
 
+
 // 读取文件配置，获得
 func SenderEmail() (*config.EmailConfig, error) {
 	configFilePath := "../config/config.json"
