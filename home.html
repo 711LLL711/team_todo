@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../stylesheets/burger.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,200,1,0" />
+    <link rel="stylesheet" href="../stylesheets/home.css">
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div id="blockdiv">  <div class="form" id="verifycode-form">
+            <h1 class="heading">请输入邀请码</h1>
+            <div class="box">
+            <input class="input" type="password" maxlength="1" id="number1">
+            <input class="input" type="password" maxlength="1" id="number2"> 
+            <input class="input" type="password" maxlength="1" id="number3">
+            <input class="input" type="password" maxlength="1" id="number4">
+            </div>
+            <span class="error-message" data-error="邀请码错误" id="invitecode-wrong"></span>
+            <button class="btn1" id="commit-verifycode">确认</button>
+            <button class="btn2" id="back-tohomepage">返回</button>
+        </div></div>
+        <div class="header" id="header">
+            <div class="content">
+                <h1 id="webname">Ding~</h1>
+                <div class="search">
+                    <input type="text" class="search__input" placeholder="Search groups">
+                    <button class="search__button">
+                      <span class="material-symbols-outlined">
+                search
+                </span>
+                    </button>
+                </div>
+                <div class="user" id="user_rightup">
+                    <img src="用户头像.jpg" alt="用户头像" id="avatar">
+                    <span class="userID" id="usersID">ID</span>
+                </div>
+            </div>
+                <ul class="bottons" id="bottons">
+                    <li class="botton"><a href="#/groups" id="groups-botton">Groups</a></li>
+                    <li class="botton"><a href="#/tasks" id="tasks-botton">Tasks</a></li>
+                    <li class="botton"><a href="#/security" id="security-botton">Security</a></li>
+                    </ul>
+                <botton class="homepage_botton" id="homepage_botton"><img src="../img/arrow_back.png" alt="" class="arrow_back">Home Page</botton>
+        </div>
+        
+        <div class="body">
+            
+            <div class="left-content">
+
+            <div class="groups" id="groups">
+                <span class="title">My Groups</span>
+                <span id="afterbotton"><button class="type3">
+                    <span class="btn-txt" id="join_group">加入群组</span>
+                </button>
+                <button class="type3">
+                    <span class="btn-txt" id="create_group">创建群组</span>
+                </button></span>
+                <div class="groups-content" id="groups-content">
+
+                
+                <!--<ul class="bigger_simplegroups">
+                    <li class="bigger_simplegroup">
+                    <img src="./用户头像.jpg" alt="">
+                    <h3>群组id</h3></li>
+                </ul>这玩意是点击groups后应该出现的东西！--> 
+
+
+                <p class="default_description">啊噢，这里好像还没有群组 快去加入或创建一个群组吧~
+                <span><button class="join type1">
+                    <span class="btn-txt" id="join_firstgroup">加入群组</span>
+                </button>
+                <button class="join type1">
+                    <span class="btn-txt" id="create_firstgroup">创建群组</span>
+                </button></span></p>
+                </div>
+
+            </div>
+            <div class="tasks" id="tasks">
+                <span class="title">MY Tasks</span>
+                <div class="tasks-content">
+                    <p class="default_description2">
+                        这里还没有待办，去加入群组或者创建一个待办~
+                        </button></p>
+
+                <!--这是task的存在形态-->
+                    <!--<div class="simple-task">
+                        <div>
+                            <img src="用户头像.jpg" alt="懒洋洋一号">
+                        </div>
+                        <div class="info">
+                            <h3 class="name">懒洋洋一号</h3>                        
+                        </div>
+                            <label class="checklabel">
+                            <input type="checkbox">
+                            <div class="checkmark"></div>
+                          </label>
+                    </div>-->
+                </div>
+            </div>
+            </div>
+            <div class="right-content">
+                <div id="my-page">
+                    <span class="title">My page</span>
+                    <div id="my-page-content">
+                    <div id="my-page-me-name">
+                    <img src="../img/群组头像.jpg" alt="">
+                    <h2>my id</h2></div>
+                    <div id="my-page-ability">
+                        <div id="ability-firstline">
+                            <div id="更换头像"></div>
+                            
+                        </div>
+                        <div id="ability-secondline"></div>
+                    </div>
+                </div>
+                </div>
+                <div class="details" id="details">
+                    <span class="title">Details</span>
+                    <div class="details_content" id="details_content">
+                        <div class="chosen_one single_detail">
+                            <span><img src="../img/群组头像.jpg" alt="" id="chosen_one_head"></span>
+                            <label for="">222</label>
+                        </div>
+                        <div class="endtime single_detail">
+                        <span class="material-symbols-outlined">
+                            alarm
+                            </span>
+                            <label for="">111</label>
+                        </div>
+                        <div class="chosen_one_id single_detail">
+                            <span class="material-symbols-outlined">
+                                description
+                                </span>
+                                <label for="">333</label>
+                        </div>
+                        <div class="chosen_one_owner single_detail">
+                            <span class="material-symbols-outlined">
+                                account_circle
+                                </span>
+                                <label for="">444</label>
+                        </div>
+                        <div class="chosen_one_ single_detail"> </div>
+                    </div>
+                </div>
+                <div class="contact_us">
+                    <div class="date-box">
+                        <span id="month"></span>
+                        <span id="date"></span>
+                    </div>
+                    <div class="contact_us_content">
+                        <span class="title">Ask us</span>
+                        <p>If you have any problems, ask us!</p>
+                    </div>
+                </div>
+                <button class="contact_us_botton">
+                    <div class="svg-wrapper-1">
+                      <div class="svg-wrapper">
+                        <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0 0h24v24H0z" fill="none"></path>
+                          <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <span>Ask us</span>
+                  </button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script text="text/javascripts" src="../javascipts/home.js"></script>
+    <script text="text/javascipts" src="../javascipts/joingroup.js"></script>
+    <script text="text/javascipts" src="../javascipts/getprofile.js"></script>
+</body>
+</html>
