@@ -45,8 +45,7 @@ document.getElementById('login').addEventListener('click',async function(){
     const old_userpassword = document.getElementById('olduser_password').value;
     empty_by_login();
     if(old_username.trim()&&old_userpassword.trim()){
-        const token = 'your_generated_token';
-
+        
         const olduser_data = {
             old_username:old_username,
             old_userpassword:old_userpassword
@@ -57,14 +56,14 @@ document.getElementById('login').addEventListener('click',async function(){
         const responseData = await response.json();
 
         if (responseData.success) {
-            alert('Registration successful!');
-            
-            window.location.href ='/';
+            localStorage.setItem('jwt',responseData.token);
+            localStorage.setItem('localid',responseData.id);
+            window.location.href = 'home.html';
         } else {
-            alert('Registration failed: ' + responseData.message);
+            alert('登录失败: ' + responseData.message);
         }
         } catch (error) {
-            alert('Error occurred during registration: ' + error.message);
+            alert('网络异常: ' + error.message);
         }
     }
 });
