@@ -2,6 +2,7 @@ package reminder
 
 import (
 	"fmt"
+	"log"
 	"team_todo/database"
 	"time"
 
@@ -16,10 +17,13 @@ func Reminder() {
 	_, err := c.AddFunc("0 8 * * *", func() {
 		// 在此处编写查询数据库的逻辑
 		// 执行查询操作，获取最新的数据
-		database.RemindNow()
+		reminders,err1 :=database.RemindNow()
+		if err1 != nil{
+			log.Println("err")
+		}
 		// 处理查询结果，执行相应的逻辑
 		//调用MyReminder函数
-		MyReminder()
+		MyReminder(reminders)
 		fmt.Println("执行数据库查询：", time.Now())
 	})
 	if err != nil {
