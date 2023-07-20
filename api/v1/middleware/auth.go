@@ -13,7 +13,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		// 从请求头部获取 Bearer JWT
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
+			c.Redirect(http.StatusSeeOther, "/users/login")
 			c.Abort()
 			return
 		}
@@ -22,7 +22,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenString := authHeader[len("Bearer "):]
 		claims, err := util.CheckToken(tokenString)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			c.Redirect(http.StatusSeeOther, "/users/login")
 			c.Abort()
 			return
 		}

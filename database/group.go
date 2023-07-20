@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"log"
 	"team_todo/global"
 	"team_todo/model"
 
@@ -29,39 +30,27 @@ func AddUserToGroup(groupwithuser model.GroupWithUser) error {
 
 // 查询用户加入的所有群组
 func GetUserGroups(UserId string) ([]model.ShowGroup, int64, error) {
-	var groupIds []struct{ GroupID string }
-	var groups []model.ShowGroup
-	var count int64 //总数
-
-	// 查询 groupwithuser 表获取 groupid 列表
+	var groupIDs []string
 	if err := global.GVA_DB.Table("groupwithuser").
 		Select("groupid").
 		Where("userid = ?", UserId).
-		Find(&groupIds).Error; err != nil {
+		Find(&groupIDs).Error; err != nil {
 		return nil, 0, err
 	}
 
-	// 构建 groupid 的切片
-	ids := make([]string, len(groupIds))
-	for i, result := range groupIds {
-		ids[i] = result.GroupID
-	}
+	// 统计 group 数量
+	count := int64(len(groupIDs))
 
-	// 查询 group 表获取对应的记录和总记录数
+	// 查询 group 表中对应 groupid 的信息
+	var showGroups []model.ShowGroup
 	if err := global.GVA_DB.Table("group").
 		Select("groupid, groupname, group_description").
-		Where("groupid IN ?", ids).
-		Find(&groups).Error; err != nil {
+		Where("groupid IN ?", groupIDs).
+		Find(&showGroups).Error; err != nil {
 		return nil, 0, err
 	}
-
-	if err := global.GVA_DB.Table("group").
-		Where("groupid IN ?", ids).
-		Count(&count).Error; err != nil {
-		return nil, 0, err
-	}
-
-	return groups, count, nil
+	log.Println("showGroups: ", showGroups)
+	return showGroups, count, nil
 }
 
 // 查询群组信息
@@ -107,7 +96,8 @@ func GetGroupMembers(GroupId string) ([]model.QueryUser, int64, error) {
 
 func GetGroupCode(GroupId string) (string, error) {
 	var group model.Group
-	if err := global.GVA_DB.Select("group_invite_id").
+	if err := global.GVA_DB.Table("group").
+		Select("group_invite_id").
 		First(&group, "groupid = ?", GroupId).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return "", errors.New("group not exist")
@@ -195,7 +185,7 @@ func DelGroup(GroupId string) error {
 
 	// 删除属于指定 groupID 的 taskid 在 reminder 表中的记录
 	if err := tx.Table("reminder").
-		Where("task_id IN ?", taskIDs).
+		Where("taskid IN ?", taskIDs).
 		Delete(&model.Reminder{}).Error; err != nil {
 		// 发生错误时回滚事务
 		tx.Rollback()
@@ -215,4 +205,17 @@ func DelGroup(GroupId string) error {
 	tx.Commit()
 
 	return nil
+}
+
+func IsGroupOwner(GroupId, UserId string) bool {
+	var group model.GroupWithUser
+	if err := global.GVA_DB.Table("groupwithuser").
+		Where("groupid = ?", GroupId).
+		First(&group).Error; err != nil {
+		return false
+	}
+	if group.UserId == UserId {
+		return true
+	}
+	return false
 }
