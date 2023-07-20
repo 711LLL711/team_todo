@@ -3,6 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
+	"team_todo/database"
 	"team_todo/model"
 	"team_todo/service"
 
@@ -80,7 +81,7 @@ func GetTasksList(c *gin.Context) {
 // 获取任务信息
 func GetTasks(c *gin.Context) {
 	id := c.Param("id")
-	log.Println("id:",id)
+	log.Println("id:", id)
 	var task model.Task
 	var err error
 	task, err = service.GetTasks(id)
@@ -96,7 +97,7 @@ func ModifyTasks(c *gin.Context) {
 	taskID := c.Param("id")
 	var task model.Task
 	task.ID = c.PostForm("id")
-	if taskID !=task.ID{
+	if taskID != task.ID {
 		c.JSON(http.StatusBadRequest, gin.H{"err": "任务ID冲突"})
 		log.Panicln("error")
 		return
@@ -108,7 +109,7 @@ func ModifyTasks(c *gin.Context) {
 	task.Deadline = c.PostForm("deadline")
 	var err error
 	task.GroupId, err = service.ModifyTasks(taskID, task)
-log.Println("controller task.GroupId:",task.GroupId)
+	log.Println("controller task.GroupId:", task.GroupId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"err": "wrong"})
 		return
@@ -116,14 +117,25 @@ log.Println("controller task.GroupId:",task.GroupId)
 	c.JSON(http.StatusOK, task)
 }
 
-//删除任务
+// 删除任务
 func DeleteTasks(c *gin.Context) {
 	taskID := c.Param("id")
 	err := service.DeleteTasks(taskID)
-	
+
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"err": "wrong"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message":"success"})
+	c.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
+// 根据关键词搜索任务
+func SearchTask(c *gin.Context) {
+	keyword := c.Query("keyword")
+	tasks, err := database.SearchTasksByKeyword(keyword)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"err": "wrong"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "success", "tasks": tasks})
 }

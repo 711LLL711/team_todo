@@ -2,6 +2,8 @@ package database
 
 import (
 	"log"
+	"sort"
+	"strings"
 	"team_todo/global"
 	"team_todo/model"
 
@@ -45,7 +47,7 @@ func GetTasksList(groupId string) (count int, tasks []model.Task, err error) {
 // 获取任务信息
 func GetTasks(taskID string) (task model.Task, err error) {
 	result := global.GVA_DB.Table("task").Where("id = ?", taskID).Find(&task)
-	log.Println("database task:",task,"result:",result)
+	log.Println("database task:", task, "result:", result)
 	if result.Error != nil {
 		return model.Task{}, result.Error
 	}
@@ -57,24 +59,24 @@ func ModifyTasks(taskID string, task model.Task) (task1 model.Task, err error) {
 
 	var oldtask model.Task
 	result := global.GVA_DB.Table("task").Where("id = ?", taskID).Find(&oldtask)
-	
-	log.Println("database old groupId:",oldtask.GroupId)
+
+	log.Println("database old groupId:", oldtask.GroupId)
 	task.GroupId = oldtask.GroupId
 	if result.Error != nil {
-		return model.Task{},result.Error
+		return model.Task{}, result.Error
 	}
-	log.Println("database groupId:",task.GroupId)
+	log.Println("database groupId:", task.GroupId)
 	err = global.GVA_DB.Table("task").Where("id = ?", taskID).Updates(&task).Error
-	if err != nil{
-		return model.Task{},err
+	if err != nil {
+		return model.Task{}, err
 	}
-	return task,nil
+	return task, nil
 }
 
-//删除任务
-func DeleteTasks(taskID string) error{
+// 删除任务
+func DeleteTasks(taskID string) error {
 	result := global.GVA_DB.Table("task").Where("ID = ?", taskID).Delete(&model.Task{})
-	
+
 	if result.Error != nil {
 		return result.Error
 	}
@@ -82,3 +84,21 @@ func DeleteTasks(taskID string) error{
 	return nil
 }
 
+// 根据关键词搜索任务
+func SearchTasksByKeyword(keyword string) ([]model.Task, error) {
+	var tasks []model.Task
+
+	// 使用 Where 条件查询满足关键字搜索的记录
+	if err := global.GVA_DB.Table("task").
+		Where("name LIKE ?", "%"+keyword+"%").
+		Find(&tasks).Error; err != nil {
+		return nil, err
+	}
+
+	// 对搜索结果按关键字与 name 值的关联度从高到低排序
+	sort.SliceStable(tasks, func(i, j int) bool {
+		return strings.Count(tasks[i].Name, keyword) > strings.Count(tasks[j].Name, keyword)
+	})
+
+	return tasks, nil
+}
