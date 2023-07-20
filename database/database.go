@@ -38,3 +38,7 @@ func CreateTables() {
 	global.GVA_DB.Table("vercode").AutoMigrate(&model.VerCode{})
 	global.GVA_DB.Table("reminder").AutoMigrate(&model.Reminder{})
 }
+
+func CreateTasksTable(){
+global.GVA_DB.AutoMigrate(&model.Task{})
+}

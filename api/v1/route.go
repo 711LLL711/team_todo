@@ -14,10 +14,8 @@ func SetupRoutes(r *gin.Engine) {
 	//登录
 	r.GET("/user/login", userController.ShowLoginPage)
 	r.POST("/user/login", userController.Login)
-	//获取用户资料
-	r.GET("/users/:id/profile", userController.GetProfile)
-	//上传头像
-	r.POST("/avatars", userController.UploadAvatar)
+	r.GET("GET /users/:id/profile", userController.GetProfile)
+
 	//注册
 	r.POST("/user/register", controller.Register)
 
@@ -40,26 +38,5 @@ func SetupRoutes(r *gin.Engine) {
 	groupController := &controller.GroupController{}
 	//创建群组
 	r.POST("/groups", groupController.CreateGroup)
-
-	//获取已加入群组列表
-	r.GET("/groups", groupController.GetGroupList)
-
-	//获取群组信息
-	r.GET("/groups/:id/info", groupController.GetGroupInfo)
-
-	//获取群组成员
-	r.GET("/groups/:id/members", groupController.GetGroupMembers)
-
-	//加入群组
-	r.GET("/groups/join", groupController.JoinGroup)
-
-	//获取群组邀请码
-	r.GET("groups/:id/code", groupController.GetGroupCode)
-
-	//退出群组
-	r.POST("/groups/:id/leave", groupController.LeaveGroup)
-
-	//解散群组
-	r.DELETE("/groups/:id", groupController.DelGroup)
 
 }
