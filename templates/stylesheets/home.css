@@ -50,7 +50,7 @@ body {
   
   .input {
     position: relative;
-    width: 2.0em;
+    width: 1.6em;
     height: 2.5em;
     margin: 1em;
     border-radius: 5px;
@@ -60,9 +60,8 @@ body {
     box-shadow: inset 3px 3px 6px #d1d1d1,
               inset -3px -3px 6px #ffffff;
     top: 4.5em;
-    left: 2.4em;
+    left: 3.0em;
     padding-left: 15px;
-    transition: .4s ease-in-out;
   }
   
   .input:hover {
@@ -86,7 +85,6 @@ body {
     border-radius: 5px;
     border: none;
     outline: none;
-    transition: .4s ease-in-out;
     box-shadow: 1px 1px 3px #b5b5b5,
                -1px -1px 3px #ffffff;
   }
@@ -105,7 +103,6 @@ body {
     border-radius: 5px;
     border: none;
     outline: none;
-    transition: .4s ease-in-out;
     box-shadow: 1px 1px 3px #b5b5b5,
                -1px -1px 3px #ffffff;
   }
@@ -281,16 +278,26 @@ body {
     position: absolute;
     background-color: #00000037;
     color: #fff;
-    width: 100%;
+    width: 80%;
     height: 98%;
     z-index: 2;
     border-radius: 20px;
     box-shadow: 3px 5px 10px rgba(0,0,0,0.3);
     min-width: 400px;
-    visibility: hidden;
+}
+#my-page2{
+    position: absolute;
+    background-color: #ffffff;
+    color: #000000;
+    width: 100%;
+    height: 60%;
+    z-index: 2;
+    border-radius: 20px;
+    box-shadow: 3px 5px 10px rgba(0,0,0,0.3);
+    min-width: 400px;
 }
 #my-page-content{
-    background-color: #000000b7;
+    background-color: #ffffffb7;
     width: 100%;
     height:90%;
     position: relative;
@@ -300,11 +307,53 @@ body {
     align-items: center;
     flex-direction: column;
 }
+#my-page-content2{
+    background-color: #ffffffb7;
+    width: 100%;
+    height:85%;
+    position: relative;
+    top: 15%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+#my-page-change-head{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    height:50%;
+}
+#my-page-edit-nickname{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+    height:20%;
+    margin: 0 0 0 30px;
+}
 #my-page img{
-    width: 58px;
+    width: 68px;
     border-radius: 40px;
     position: relative;
-    
+    margin : 0 0 0 20px;
+}
+#my-page-me{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height :20%;
+}
+#my-page-me h2{
+    margin: 0 0 0 20px;
+}
+#my-page2 img{
+    width: 108px;
+    border-radius: 40px;
+    position: relative;
+    margin: 0 0 0 20px;
 }
 .right-content{
     position: relative;
@@ -342,10 +391,10 @@ body {
     min-width: 400px;
 }
 .groups{
-    height: 50%;
+    height: 100%;
 }
 .tasks{
-    height: 80%;
+    height: 100%;
 }
 .default_description{
     position: relative;
@@ -495,7 +544,7 @@ body {
 }
 #afterbotton{
     position: absolute;
-    left:55%;
+    left:70%;
 }
 .type3,
 .type4{
@@ -509,7 +558,7 @@ body {
     border-radius: 30px;
     color: #333;
     transition: all 1.3s ease-in-out;
-    top: 16px;
+    top: 18px;
     visibility: hidden;
 }
 .type3:hover,
