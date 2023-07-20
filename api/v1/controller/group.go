@@ -92,7 +92,7 @@ func (gc *GroupController) GetGroupCode(c *gin.Context) {
 	}
 	//群组本来没有邀请码，新建邀请码
 	if Code == "" {
-		Code = uuid.New().String()[:12]
+		Code = uuid.New().String()[:4]
 		database.StoreGroupCode(GroupId, Code)
 	}
 	c.JSON(http.StatusOK, gin.H{"code": Code})
