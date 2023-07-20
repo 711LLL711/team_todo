@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func routeForReminder(r *gin.Engine) {
+func RouteForReminder(r *gin.Engine) {
 	//创建提醒
 	r.POST("/reminders", controller.CreateReminders)
 	//获取提醒列表

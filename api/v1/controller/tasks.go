@@ -80,6 +80,7 @@ func GetTasksList(c *gin.Context) {
 // 获取任务信息
 func GetTasks(c *gin.Context) {
 	id := c.Param("id")
+	log.Println("id:",id)
 	var task model.Task
 	var err error
 	task, err = service.GetTasks(id)
@@ -103,11 +104,11 @@ func ModifyTasks(c *gin.Context) {
 	task.Name = c.PostForm("name")
 	task.Description = c.PostForm("description")
 	task.Status = c.PostForm("status")
-	task.GroupId = c.PostForm("groupId")
-
+	task.Assignee = c.PostForm("assignee")
+	task.Deadline = c.PostForm("deadline")
 	var err error
 	task.GroupId, err = service.ModifyTasks(taskID, task)
-
+log.Println("controller task.GroupId:",task.GroupId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"err": "wrong"})
 		return
