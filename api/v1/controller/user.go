@@ -35,7 +35,6 @@ func (uc *UserController) Login(c *gin.Context) {
 	var loginReq model.User
 	loginReq.Email = c.PostForm("email")
 	loginReq.Password = c.PostForm("password")
-	log.Println("loginReq.Email:", loginReq.Email, "loginReq.password:", loginReq.Password)
 	// 调用服务层验证密码，生成session
 	err := service.Login(loginReq, c.Request, c.Writer)
 	if err != nil {
