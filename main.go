@@ -13,6 +13,7 @@ import (
 func main() {
 	//load config
 	global.LoadConfig()
+
 	//connect the database
 	database.Connect()
 	//建表
@@ -23,11 +24,13 @@ func main() {
 	//设置存放图片
 	Server.Static("/images", "./images")
 
+	//设置存放静态文件
+	Server.Static("/static", "./static")
+	//load html
+	Server.LoadHTMLGlob("templates/*")
 	// 设置路由
 	route.SetupRoutes(Server)
 
-	//load the front-end file
-	//Server.LoadHTMLGlob("templates/*")
 	Server.Run(":8080")
 
 }

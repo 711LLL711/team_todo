@@ -2,6 +2,7 @@ package route
 
 import (
 	"team_todo/api/v1/controller"
+	//"team_todo/api/v1/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,14 +13,14 @@ func SetupRoutes(r *gin.Engine) {
 
 	userController := &controller.UserController{}
 	//登录
-	r.GET("/user/login", userController.ShowLoginPage)
-	r.POST("/user/login", userController.Login)
+	r.GET("/users/login", userController.ShowLoginPage)
+	r.POST("/users/login", userController.Login)
 	//获取用户资料
-	r.GET("/users/:id/profile", userController.GetProfile)
+	r.GET("/userss/:id/profile", userController.GetProfile)
 	//上传头像
 	r.POST("/avatars", userController.UploadAvatar)
 	//注册
-	r.POST("/user/register", controller.Register)
+	r.POST("/users/register", controller.Register)
 
 	//更新
 	r.PUT("/user/profile", controller.Update)
@@ -28,10 +29,12 @@ func SetupRoutes(r *gin.Engine) {
 	r.GET("/user/verify-code", controller.SendVerCodeByEmail)
 
 	//运用中间件的路由
-	// User_Auth_Group := r.Group("/user" , middleware.AuthMiddleware())
+	// User_Auth_Group := r.Group("/users")
+	// User_Auth_Group.Use(middleware.AuthMiddleware())
 	// {
 	// 	User_Auth_Group.GET("/:id/profile", userController.GetProfile)
-	// 	User_Auth_Group.PUT("/profile",  controller.Update)
+	// 	User_Auth_Group.PUT("/profile", controller.Update)
+	// 	User_Auth_Group.GET("/verify-code", controller.SendVerCodeByEmail)
 
 	// }
 	//重设密码(注册时发送“发送邮箱验证码”“重设密码”“注册”请求)

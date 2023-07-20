@@ -9,9 +9,9 @@ type Group struct {
 	Group_Invite_Id   string `gorm:"column:group_invite_id"` //邀请码
 }
 type ShowGroup struct {
-	GroupId           string
-	GroupName         string
-	Group_Description string
+	GroupId           string `gorm:"column:groupid"`
+	GroupName         string `gorm:"column:groupname"`
+	Group_Description string `gorm:"column:group_description"`
 }
 type QueryGroup struct {
 	GroupId           string
