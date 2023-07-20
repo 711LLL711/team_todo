@@ -23,7 +23,7 @@ func SetupRoutes(r *gin.Engine) {
 	r.PUT("/user/profile", controller.Update)
 
 	//发送邮箱验证码
-	r.POST("/user/verify-code", controller.SendVerCodeByEmail)
+	r.GET("/user/verify-code", controller.SendVerCodeByEmail)
 
 	//运用中间件的路由
 	// User_Auth_Group := r.Group("/user" , middleware.AuthMiddleware())

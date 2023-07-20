@@ -26,6 +26,7 @@ func main() {
 	// 设置路由
 	route.SetupRoutes(Server)
 
+	route.TaskRoutes(Server)
 	//load the front-end file
 	//Server.LoadHTMLGlob("templates/*")
 	Server.Run(":8080")

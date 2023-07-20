@@ -31,18 +31,20 @@ func GetTasksList(groupId string) (count int, tasks []model.Task, err error) {
 
 // 获取任务信息
 func GetTasks(taskID string) (task model.Task, err error) {
+	log.Println("taskID:",taskID)
 	task, err = database.GetTasks(taskID)
+	log.Println("service task:",task)
 	if err != nil {
 		log.Panicln("error")
-		return model.Task{}, nil
+		return model.Task{}, err
 	}
-	return task, err
+	return task, nil
 }
 
 // 更新任务信息
 func ModifyTasks(taskID string, task model.Task) (groupId string, err error) {
-
-	err = database.ModifyTasks(taskID, task)
+	task,err = database.ModifyTasks(taskID, task)
+	log.Println("service groupId:",task.GroupId)
 	if err != nil {
 		log.Panicln("error")
 		return "", err
