@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"team_todo/model"
 	"team_todo/service"
+	"team_todo/util"
 
 	"github.com/google/uuid"
 
@@ -53,6 +54,14 @@ func Update(c *gin.Context) {
 func SendVerCodeByEmail(c *gin.Context) {
 	service.SenderEmail()
 	reqemail := c.PostForm("email")
+	//检查邮箱是否合法
+	if !util.IsValidEmail(reqemail) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": "fail",
+			"error":  "invalid email",
+		})
+		return
+	}
 	code := service.GenVerCode(reqemail) //生成验证码，并存到数据库
 	err := service.PerformEmailSending(reqemail, code)
 	if err != nil {

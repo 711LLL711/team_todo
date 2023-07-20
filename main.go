@@ -26,8 +26,11 @@ func main() {
 
 	//设置存放静态文件
 	Server.Static("/static", "./static")
+	Server.Static("/javascripts", "./templates/javascripts")
+	Server.Static("/stylesheets", "./templates/stylesheets")
+
 	//load html
-	Server.LoadHTMLGlob("templates/*")
+	Server.LoadHTMLGlob("templates/views/*")
 	// 设置路由
 	route.SetupRoutes(Server)
 
