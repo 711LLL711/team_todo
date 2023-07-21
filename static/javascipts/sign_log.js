@@ -7,14 +7,6 @@ document.getElementById('register').addEventListener('click',async function(){
     const new_userpassword_again = document.getElementById('newuser_password_again').value;
     empty_by_register();
     if(new_userpassword!==''&&new_userpassword_again!==''&&new_username!==''&&new_useremail!==''&&new_userverifycode!==''){
-        const keyLength = 32; // 256位密钥长度
-        let randomKey = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < keyLength; i++) {
-            randomKey += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-
-        console.log(randomKey);
 
         const newuser_data = {
             new_username:new_username,
@@ -24,18 +16,16 @@ document.getElementById('register').addEventListener('click',async function(){
         };
     
         try{
-            const response = await axios('/user/register', newuser_data);
+            const response = await axios('/users/register', newuser_data);
 
-            const responseData = await response.json();
-
-            if (responseData.success) {
+            if (response.error) {
+                alert('Registration failed: ' + response.message);
+            } else {
                 let input_verifycode = document.getElementById('newuser_verifycode');
                 showError(input_verifycode.parentNode,'验证码不能为空！');
-            } else {
-                alert('Registration failed: ' + responseData.message);
             }
             } catch (error) {
-                alert('Error occurred during registration: ' + error.message);
+                alert('Error occurred during registration: ' + error.error);
         }
     };
 });
@@ -51,16 +41,14 @@ document.getElementById('login').addEventListener('click',async function(){
             old_userpassword:old_userpassword
         };
         try{
-            const response = await axios('/user/login', olduser_data);
+            const response = await axios('/users/login', olduser_data);
 
-        const responseData = await response.json();
-
-        if (responseData.success) {
-            localStorage.setItem('jwt',responseData.token);
-            localStorage.setItem('localid',responseData.id);
-            window.location.href = 'home.html';
+        if (response.error) {
+           alert('登录失败: ' + response.message); 
         } else {
-            alert('登录失败: ' + responseData.message);
+            localStorage.setItem('jwt',response.token);
+            localStorage.setItem('localid',response.id);
+            window.location.href = './home.html';
         }
         } catch (error) {
             alert('网络异常: ' + error.message);
@@ -76,15 +64,12 @@ document.getElementById('verifycode_get').addEventListener('click',async functio
             email:new_useremail,
         };
         try {
-            const response = await axios('/user/verify-code',email);
-
-        const responseData = await response.json();
-    
-        if(responseData.success){
-            showError(new_userverifycode.parentNode,"验证码已发送");
+            const response = await axios('/users/verify-code',email);
+        if(response.error){
+            showError(new_userverifycode.parentNode,"请xx秒后再试!");
         }
         else{
-            showError(new_userverifycode.parentNode,"请xx秒后再试!");
+            showError(new_userverifycode.parentNode,"验证码已发送");
         }
         }catch (error) {
             alert('Error occurred');
