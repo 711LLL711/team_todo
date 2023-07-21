@@ -3,7 +3,9 @@ package controller
 //从路由请求中解析参数和结构体，调用 Model 和 Service，处理业务逻辑，决定如何响应用户的请求，处理异常和错误
 
 import (
+	"log"
 	"net/http"
+	"team_todo/database"
 	"team_todo/model"
 	"team_todo/service"
 	"team_todo/util"
@@ -41,7 +43,7 @@ func Update(c *gin.Context) {
 	var userReq model.User
 	userReq.Nickname = c.PostForm("nickname")
 	userReq.Avatar = c.PostForm("avatar")
-
+	userReq.Email = c.PostForm("email")
 	err := service.Modify(userReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
@@ -52,7 +54,6 @@ func Update(c *gin.Context) {
 
 // 发送邮箱验证码
 func SendVerCodeByEmail(c *gin.Context) {
-	service.SenderEmail()
 	reqemail := c.PostForm("email")
 	//检查邮箱是否合法
 	if !util.IsValidEmail(reqemail) {
@@ -77,13 +78,16 @@ func SendVerCodeByEmail(c *gin.Context) {
 func ResetPassword(c *gin.Context) {
 	var userReq model.User
 	userReq.Email = c.PostForm("email")
-	userReq.Password = c.PostForm("password")
+	pass := c.PostForm("password")
+	userReq.Password = database.Myencrypt(pass)
 	code := c.PostForm("code")
 	res := service.CheckVercode(code, userReq.Email)
 	if res {
-		service.Modify(userReq)
+		service.ModifyPassword(userReq)
+		log.Println("controller:修改密码完成")
 		return
 	}
+
 	c.JSON(http.StatusBadRequest, gin.H{
 		"status": "fail",
 		"error":  "wrong verification code",
