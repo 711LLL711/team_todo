@@ -29,7 +29,7 @@ func MyReminder(reminders []model.Reminder) {
 
 			// 执行提醒逻辑，发送提醒通知
 			Conduct(reminder)
-			fmt.Printf("触发提醒：Reminder ID %d, To %s\n", reminder.ReminderId, reminder.Email)
+			fmt.Printf("触发提醒：Reminder ID %s, To %s\n", reminder.ReminderId, reminder.Email)
 		}(reminder)
 	}
 

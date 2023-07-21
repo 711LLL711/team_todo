@@ -4,22 +4,23 @@ import (
 	"fmt"
 	"net/smtp"
 	"strings"
-	"team_todo/config"
+	// "team_todo/config"
+	"team_todo/global"
 	"team_todo/model"
 )
 
 //具体的提醒逻辑
 
 // 大概率要debug
-func SenderEmail() (*config.EmailConfig, error) {
-	configFilePath := "../config/config.json"
-	config, err := config.LoadConfig(configFilePath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read config file: %v", err)
-	}
+// func SenderEmail() (*config.EmailConfig, error) {
+// 	configFilePath := "../config/config.json"
+// 	config, err := config.LoadConfig(configFilePath)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to read config file: %v", err)
+// 	}
 
-	return &config.Email, nil
-}
+// 	return &config.Email, nil
+// }
 func SendMail(user, password, host, to, subject, body, mailtype string) error {
 	hp := strings.Split(host, ":")
 	auth := smtp.PlainAuth(password, user, password, hp[0])
@@ -39,12 +40,14 @@ func Conduct(reminder model.Reminder) error {
 	// s := GenRanNum(100000, 999999)
 	// fmt.Println(s)
 
-	senderemail, err1 := SenderEmail()
-	if err1 != nil {
-		return err1
-	}
-	user := senderemail.SenderEmail
-	password := senderemail.SenderPassword
+	// senderemail, err1 := SenderEmail()
+	// if err1 != nil {
+	// 	return err1
+	// }
+	// user := senderemail.SenderEmail
+	// password := senderemail.SenderPassword
+	user := global.GVA_CONFIG.Email.SenderEmail
+	password := global.GVA_CONFIG.Email.SenderPassword
 	host := "smtp.qq.com:587"
 	to := reminder.Email
 	subject := "Reminder from Team_todo"

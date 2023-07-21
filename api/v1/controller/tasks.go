@@ -32,8 +32,7 @@ func CreateTasks(c *gin.Context) {
 // 获取任务列表
 func GetTasksList(c *gin.Context) {
 	var tasks []model.Task
-	var groupId string
-	groupId = c.Query("groupId")
+	groupId := c.Query("groupId")
 	var count int
 	var err error
 	count, tasks, err = service.GetTasksList(groupId)

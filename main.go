@@ -2,6 +2,7 @@ package main
 
 import (
 	route "team_todo/api/v1"
+	"team_todo/api/v1/reminder"
 	"team_todo/database"
 	"team_todo/global"
 
@@ -33,8 +34,10 @@ func main() {
 	Server.LoadHTMLGlob("templates/views/*")
 	// 设置路由
 	route.SetupRoutes(Server)
-
+	route.RouteForReminder(Server)
 	route.TaskRoutes(Server)
+		// reminder.ReminderTest()
+				reminder.Reminder()
 	//load the front-end file
 	//Server.LoadHTMLGlob("templates/*")
 	Server.Run(":8080")
