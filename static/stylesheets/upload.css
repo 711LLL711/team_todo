@@ -1,0 +1,79 @@
+.custum-file-upload {
+    height: 80px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    gap: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #cacaca;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
+  }
+  
+  .custum-file-upload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .custum-file-upload .icon svg {
+    height: 80px;
+    fill: rgba(75, 85, 99, 1);
+  }
+  
+  .custum-file-upload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .custum-file-upload .text span {
+    font-weight: 400;
+    color: rgba(75, 85, 99, 1);
+  }
+  
+  .custum-file-upload input {
+    display: none;
+  }
+  .change_nickname {
+    background: none;
+    border: none;
+    outline: none;
+    max-width: 190px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 9999px;
+    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+    color: #000000a5;
+  }
+  .card {
+    width: 190px;
+    height: 200px;
+    border-radius: 30px;
+    background: #e0e0e0ba;
+    box-shadow: 15px 15px 30px #bebebef9,
+               -15px -15px 30px #ffffff9c;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    position: absolute;
+    z-index: 10;
+    left: 73%;
+    top:100%;
+    visibility: hidden;
+  }
+  .card h2{
+    margin: 0;
+  }
+  .card h3{
+    letter-spacing: 20px;
+    font-size: 30px;
+    margin-left: 10px;
+  }
+   
