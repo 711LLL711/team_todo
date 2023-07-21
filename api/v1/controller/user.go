@@ -35,6 +35,7 @@ func (uc *UserController) Login(c *gin.Context) {
 	var loginReq model.User
 	loginReq.Email = c.PostForm("email")
 	loginReq.Password = c.PostForm("password")
+	loginReq.Id, _ = database.GetId(loginReq.Email)
 	// 调用服务层验证密码，生成session
 	err := service.Login(loginReq, c.Request, c.Writer)
 	if err != nil {
@@ -49,7 +50,7 @@ func (uc *UserController) Login(c *gin.Context) {
 		return
 	}
 	c.Header("Authorization", "Bearer "+token)
-	c.JSON(http.StatusOK, gin.H{"token": token, "expire": expireTimestap})
+	c.JSON(http.StatusOK, gin.H{"token": token, "expire": expireTimestap, "id": loginReq.Id})
 }
 
 func (uc *UserController) GetProfile(c *gin.Context) {

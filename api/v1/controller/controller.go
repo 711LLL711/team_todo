@@ -54,7 +54,6 @@ func Update(c *gin.Context) {
 
 // 发送邮箱验证码
 func SendVerCodeByEmail(c *gin.Context) {
-	service.SenderEmail()
 	reqemail := c.PostForm("email")
 	//检查邮箱是否合法
 	if !util.IsValidEmail(reqemail) {
