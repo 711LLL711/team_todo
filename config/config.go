@@ -22,8 +22,8 @@ type DatabaseConfig struct {
 }
 
 type EmailConfig struct {
-	SenderEmail    string
-	SenderPassword string
+	SenderEmail    string `json:"sender_email"`
+	SenderPassword string `json:"sender_password"`
 }
 
 func LoadConfig(filePath string) (*Config, error) {

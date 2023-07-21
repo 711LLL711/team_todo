@@ -1,7 +1,7 @@
 package model
 
 import (
-	"time"
+	//"time"
 
 	//"gorm.io/gorm"
 )
@@ -10,6 +10,6 @@ import (
 
 type VerCode struct {
 	Code       string
-	Expiration time.Time
+	Expiration string
 	Email      string
 }

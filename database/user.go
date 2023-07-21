@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"log"
 	"team_todo/global"
 	"team_todo/model"
 
@@ -81,13 +82,24 @@ func Modify(userinfo model.User) error {
 	userReq.Nickname = userinfo.Nickname
 	userReq.Avatar = userinfo.Avatar
 
-	err := global.GVA_DB.Model(&model.User{}).Where("email = ?", userinfo.Email).Updates(&userReq).Error
+	log.Println("database 修改目标用户：",userinfo.Email)
+	err := global.GVA_DB.Table("user").Where("email = ?", userinfo.Email).Updates(&userReq).Error
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
+func ModifyPassword(userinfo model.User) error {
+	var userReq model.User
+	userReq.Password = Myencrypt(userinfo.Password)
+
+	err := global.GVA_DB.Table("user").Where("email = ?", userinfo.Email).Updates(&userReq).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
 // 由service调用的获取用户资料函数
 func GetProfile(UserId string) (model.User, error) {
 	var user model.User
