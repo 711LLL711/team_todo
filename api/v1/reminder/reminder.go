@@ -14,11 +14,11 @@ func Reminder() {
 	// 创建 cron 实例
 	c := cron.New()
 
-	_, err := c.AddFunc("58 14 * * *", func() {
+	_, err := c.AddFunc("* * * * *", func() {
 		// 在此处编写查询数据库的逻辑
 		// 执行查询操作，获取最新的数据
 		log.Println("开始发送提醒")
-		reminders,err1 :=database.RemindNow()
+		reminders,err1 :=database.RemindNow1()
 		if err1 != nil{
 			log.Println("err")
 		}

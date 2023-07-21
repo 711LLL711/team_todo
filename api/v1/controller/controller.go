@@ -56,7 +56,7 @@ func Update(c *gin.Context) {
 func SendVerCodeByEmail(c *gin.Context) {
 	reqemail := c.PostForm("email")
 	//检查邮箱是否合法
-	if !util.IsValidEmail(reqemail) {
+	if util.IsValidEmail(reqemail)==false {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": "fail",
 			"error":  "invalid email",
