@@ -8,4 +8,5 @@ type Reminder struct {
 	Assignee   string `json:"assignee"`
 	Nickname   string `json:"name"`
 	Email      string `json:"emial"`
+	Time       int    `json:"time"`
 }

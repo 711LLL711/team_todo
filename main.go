@@ -32,12 +32,12 @@ func main() {
 
 	//load html
 	Server.LoadHTMLGlob("templates/views/*")
+	reminder.Reminder()
 	// 设置路由
 	route.SetupRoutes(Server)
 	route.RouteForReminder(Server)
 	route.TaskRoutes(Server)
-		// reminder.ReminderTest()
-				reminder.Reminder()
+	// reminder.ReminderTest()
 	//load the front-end file
 	//Server.LoadHTMLGlob("templates/*")
 	Server.Run(":8080")
