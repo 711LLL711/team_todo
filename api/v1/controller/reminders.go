@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"team_todo/model"
 	"team_todo/service"
@@ -31,6 +32,7 @@ func CreateReminders(c *gin.Context) {
 // 删除提醒
 func DeleteReminders(c *gin.Context) {
 	reminderId := c.Param("id")
+	log.Println("controller deletereminders id:",reminderId)
 	err := service.DeleteReminders(reminderId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
