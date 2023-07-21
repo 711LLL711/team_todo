@@ -24,4 +24,5 @@ func LoadConfig() {
 		log.Println("解析失败")
 		log.Fatal(err)
 	}
+	log.Println("解析成功")
 }

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"team_todo/config"
+	"log"
 	"team_todo/database"
 	"team_todo/global"
 	"team_todo/model"
@@ -51,17 +51,21 @@ func Modify(userinfo model.User) error {
 	return err
 }
 
-
-// 读取文件配置，获得
-func SenderEmail() (*config.EmailConfig, error) {
-	configFilePath := "../config/config.json"
-	config, err := config.LoadConfig(configFilePath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read config file: %v", err)
-	}
-
-	return &config.Email, nil
+func ModifyPassword(userinfo model.User) error {
+	// 在这里调用数据库包中的函数来进行用户信息修改逻辑处理
+	err := database.ModifyPassword(userinfo)
+	return err
 }
+// 读取文件配置，获得
+// func SenderEmail() (*config.EmailConfig, error) {
+// 	configFilePath := "../config/config.json"
+// 	config, err := config.LoadConfig(configFilePath)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to read config file: %v", err)
+// 	}
+
+// 	return &config.Email, nil
+// }
 
 // 发送验证邮件
 // func SendVerCodeByEmail(email, code string) error {
@@ -109,12 +113,18 @@ func PerformEmailSending(reqemail, code string) error {
 	// s := GenRanNum(100000, 999999)
 	// fmt.Println(s)
 
-	senderemail, err1 := SenderEmail()
-	if err1 != nil {
-		return err1
-	}
-	user := senderemail.SenderEmail
-	password := senderemail.SenderPassword
+	// senderemail, err1 := SenderEmail()
+	// log.Println("service 解析配置：",senderemail)
+	// if err1 != nil {
+	// 	return err1
+	// }
+	// user := senderemail.SenderEmail
+	// password := senderemail.SenderPassword
+	global.LoadConfig()
+	user := global.GVA_CONFIG.Email.SenderEmail
+	password := global.GVA_CONFIG.Email.SenderPassword
+	log.Println(global.GVA_CONFIG)
+	log.Println("service email:",user,password)
 	host := "smtp.qq.com:587"
 	to := reqemail
 	subject := "Verification Code from Team_todo"
@@ -147,7 +157,9 @@ func GenVerCode(reqemail string) string {
 
 	// 设置验证码的有效期为5分钟
 	var verificationCode model.VerCode
-	verificationCode.Expiration = time.Now().Add(5 * time.Minute)
+	due:=time.Now().Add(5 * time.Minute).UTC()
+	timeString := due.Format("2006-01-02 15:04:05")
+	verificationCode.Expiration = timeString
 
 	// 将验证码和有效期存储在数据库或缓存中，以便后续验证时使用
 	database.StoreVerCode(global.GVA_DB, code, verificationCode.Expiration, reqemail)
@@ -176,14 +188,28 @@ func CheckVercode(code string, reqemail string) bool {
 		return false
 	}
 	// 检查当前时间是否在有效期内
-	currentTime := time.Now()
-	if currentTime.Before(being_used.Expiration) {
-		// 执行验证码的验证逻辑
-		if code == being_used.Code {
-			return true
-		}
+	parsedTime, err := time.Parse("2006-01-02 15:04:05", being_used.Expiration)
+	if err != nil {
+		fmt.Println("Error parsing time:", err)
+		return false
 	}
 
+	currentTime := time.Now()
+	log.Println("service current time:",currentTime.UTC(),"parsedtime:",parsedTime)
+
+	if currentTime.UTC().Before(parsedTime) {
+		log.Println("service 验证码在有效期内")
+		// 执行验证码的验证逻辑
+		if code == being_used.Code {
+			log.Println("验证码验证通过")
+			log.Println("true")
+			return true
+		}
+		log.Println(false)
+		return false
+	}
+log.Println("service 验证码过期")
+log.Println("false")
 	return false
 }
 
